@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import Bpmn from "./Bpmn"
 import type InternalEvent from "bpmn-js/lib/Viewer"
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -27,16 +28,26 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
 `
+type BpmnChild = {
+  handleReset: () => void
+}
 
 function App() {
-
+  const childRef = useRef<BpmnChild>();
   const onEventclick = (e: InternalEvent) => {
     console.log(e)
   }
 
+  const handleReset = () => {
+    if (childRef.current) {
+      childRef.current.handleReset()
+    }
+  }
+
   return (
     <>
-      <Bpmn xml={xml} onEventclick={onEventclick} />
+      <button onClick={handleReset}>a</button>
+      <Bpmn ref={childRef} xml={xml} onEventclick={onEventclick} />
     </>
   )
 }
